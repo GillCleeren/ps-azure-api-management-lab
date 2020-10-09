@@ -29,7 +29,7 @@ namespace Globomantics.TrafficInfo.Api
                 {
                     Version = "v1",
                     Title = "Traffic API",
-                    Description = "National Traffic Service - Traffic API"
+                    Description = "Globomantics Traffic Service - Traffic API"
                 });
             });
 
