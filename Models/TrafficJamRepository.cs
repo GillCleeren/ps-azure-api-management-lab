@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NTS.TrafficInfo.Api.Models
+namespace Globomantics.TrafficInfo.Api.Models
 {
     public class TrafficJamRepository : ITrafficJamRepository
     {

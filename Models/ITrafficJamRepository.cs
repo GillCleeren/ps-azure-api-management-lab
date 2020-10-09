@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NTS.TrafficInfo.Api.Models
+namespace Globomantics.TrafficInfo.Api.Models
 {
     public interface ITrafficJamRepository
     {
