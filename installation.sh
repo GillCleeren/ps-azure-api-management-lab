@@ -1,6 +1,6 @@
 
 # variable configuration
-ntsApiName=NTSTrafficInfoAPI$(openssl rand -hex 5)
+globomanticsApiName=GlobomanticsTrafficInfoAPI$(openssl rand -hex 5)
 RESOURCE_GROUP=$(az group list --query "[0].name" -o tsv)
 PLAN_NAME=myPlan
 DEPLOY_USER="randomUser1$(openssl rand -hex 5)"
@@ -16,13 +16,13 @@ git config --global user.email "$GIT_EMAIL"
 
 # Azure Resource Creation
 
-az appservice plan create --name $ntsApiName --resource-group $RESOURCE_GROUP --location centralus --sku FREE --verbose
+az appservice plan create --name $globomanticsApiName --resource-group $RESOURCE_GROUP --location centralus --sku FREE --verbose
 
-az webapp create --name $ntsApiName --resource-group $RESOURCE_GROUP --plan $ntsApiName --deployment-local-git --verbose
+az webapp create --name $globomanticsApiName --resource-group $RESOURCE_GROUP --plan $globomanticsApiName --deployment-local-git --verbose
 
 az webapp deployment user set --user-name $DEPLOY_USER --password $DEPLOY_PASSWORD --verbose
 
-GIT_URL="https://$DEPLOY_USER@$ntsApiName.scm.azurewebsites.net/$ntsApiName.git"
+GIT_URL="https://$DEPLOY_USER@$globomanticsApiName.scm.azurewebsites.net/$globomanticsApiName.git"
 
 cd ps-azure-api-management-lab
 
@@ -30,8 +30,8 @@ git remote add $REMOTE_NAME $GIT_URL
 
 git add .
 git commit -m "temp"
-git push "https://$DEPLOY_USER:$DEPLOY_PASSWORD@$ntsApiName.scm.azurewebsites.net/$ntsApiName.git" 
+git push "https://$DEPLOY_USER:$DEPLOY_PASSWORD@$globomanticsApiName.scm.azurewebsites.net/$globomanticsApiName.git" 
 
-printf "Swagger URL: https://$ntsApiName.azurewebsites.net/swagger\n"
+printf "Swagger URL: https://$globomanticsApiName.azurewebsites.net/swagger\n"
 
-printf "Example URL: https://$ntsApiName.azurewebsites.net/swagger/v1/swagger.json\n\n"
+printf "Example URL: https://$globomanticsApiName.azurewebsites.net/swagger/v1/swagger.json\n\n"
