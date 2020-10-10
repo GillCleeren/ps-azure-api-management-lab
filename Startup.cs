@@ -1,11 +1,11 @@
+using Globomantics.TrafficInfo.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Globomantics.TrafficInfo.Api.Models;
-using Swashbuckle.Swagger;
+using System.Collections.Generic;
 
 namespace Globomantics.TrafficInfo.Api
 {
@@ -18,7 +18,6 @@ namespace Globomantics.TrafficInfo.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ITrafficJamRepository, TrafficJamRepository>();
@@ -33,10 +32,14 @@ namespace Globomantics.TrafficInfo.Api
                 });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
             services.AddControllers();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -48,7 +51,20 @@ namespace Globomantics.TrafficInfo.Api
 
             app.UseRouting();
 
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = "swagger/{documentName}/swagger.json";
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    swaggerDoc.Servers = new List<OpenApiServer>
+                    {
+                        new OpenApiServer
+                        {
+                            Url = $"{httpReq.Scheme}://{httpReq.Host.Value}"
+                        }
+                    };
+                });
+            });
 
             app.UseSwaggerUI(c =>
             {
@@ -56,6 +72,8 @@ namespace Globomantics.TrafficInfo.Api
             });
 
             app.UseAuthorization();
+
+            app.UseCors("Open");
 
             app.UseEndpoints(endpoints =>
             {
